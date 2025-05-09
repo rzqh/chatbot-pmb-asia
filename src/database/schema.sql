@@ -1,0 +1,56 @@
+-- USERS TABLE
+CREATE TABLE IF NOT EXISTS users (
+  session_id VARCHAR(255) PRIMARY KEY,
+  name VARCHAR(100),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  last_active TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- CHATS TABLE
+CREATE TABLE IF NOT EXISTS chats (
+  id SERIAL PRIMARY KEY,
+  session_id VARCHAR(255) REFERENCES users(session_id) ON DELETE CASCADE,
+  query TEXT NOT NULL,
+  intent VARCHAR(255) NOT NULL,
+  response TEXT NOT NULL,
+  platform VARCHAR(50) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- INTENT RESPONSES TABLE
+CREATE TABLE IF NOT EXISTS intent_responses (
+  id SERIAL PRIMARY KEY,
+  intent_name VARCHAR(255) NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  subtitle TEXT NOT NULL,
+  "order" INT DEFAULT 1,
+  active BOOLEAN DEFAULT TRUE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- JADWAL PENDAFTARAN TABLE
+CREATE TABLE IF NOT EXISTS jadwal_pendaftaran (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  subtitle TEXT NOT NULL,
+  "order" INT DEFAULT 1,
+  active BOOLEAN DEFAULT TRUE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- REASONS TABLE (SESUAIKAN UNTUK POSTGRES)
+CREATE TABLE IF NOT EXISTS reasons (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  subtitle TEXT NOT NULL
+);
+
+-- INDEXES
+CREATE INDEX IF NOT EXISTS idx_intent_responses_intent_name ON intent_responses(intent_name);
+CREATE INDEX IF NOT EXISTS idx_intent_responses_order ON intent_responses("order");
+CREATE INDEX IF NOT EXISTS idx_users_session_id ON users(session_id);
+CREATE INDEX IF NOT EXISTS idx_chats_session_id ON chats(session_id);
+CREATE INDEX IF NOT EXISTS idx_chats_created_at ON chats(created_at);
+CREATE INDEX IF NOT EXISTS idx_chats_intent ON chats(intent);
