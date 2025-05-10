@@ -11,8 +11,8 @@ async function infoJadwalPendaftaranIntent(agent) {
       agent.add(response);
     } else {
       response = "Berikut adalah jadwal pendaftaran yang tersedia:\n";
-      jadwal.forEach((item, index) => {
-        response += `${index + 1}. ${item.title}: ${item.subtitle}\n`;
+      jadwal.forEach((item) => {
+        response += `${item.title}: ${item.subtitle}\n`;
       });
       agent.add(response);
     }
