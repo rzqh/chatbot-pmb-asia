@@ -9,7 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "actions-on-google": "^3.0.0",
+    "actions-on-google": "^2.14.0",
+    "cors": "^2.8.5",
     "dialogflow-fulfillment": "^0.5.0",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
@@ -18,11 +19,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/adityaoryza/webhookclone.git"
+    "url": "git+https://github.com/rzqh/chatbot-pmb-asia.git"
   },
   "bugs": {
-    "url": "https://github.com/adityaoryza/webhookclone/issues"
+    "url": "https://github.com/rzqh/chatbot-pmb-asia.git/issues"
   },
-  "homepage": "https://github.com/adityaoryza/webhookclone#readme",
+  "homepage": "https://github.com/rzqh/chatbot-pmb-asia.git#readme",
   "description": ""
 }
