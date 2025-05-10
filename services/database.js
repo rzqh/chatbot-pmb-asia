@@ -242,29 +242,15 @@ async function getProgramStudiSarjana() {
   return result.rows;
 }
 
-// Fungsi untuk mengambil data program studi profesi
-async function getProgramStudiProfesi() {
-  const result = await pool.query("SELECT * FROM program_studi_profesi");
-  return result.rows;
-}
-
 // Fungsi untuk mengambil data program studi magister
 async function getProgramStudiMagister() {
   const result = await pool.query("SELECT * FROM program_studi_magister");
   return result.rows;
 }
 
-// Fungsi untuk mengambil data program studi doktor
-async function getProgramStudiDoktor() {
-  const result = await pool.query("SELECT * FROM program_studi_doktor");
+async function getLokasiKampus() {
+  const result = await pool.query("SELECT * FROM lokasi_kampus");
   return result.rows;
-}
-
-async function getSeleksiBebasTes() {
-  const query =
-    "SELECT id, title, subtitle, text FROM seleksi_bebas_tes ORDER BY id ASC";
-  const { rows } = await pool.query(query);
-  return rows;
 }
 
 module.exports = {
@@ -280,11 +266,9 @@ module.exports = {
   getJadwalPendaftaran,
   getBiayaPendaftaran,
   getProgramStudiSarjana,
-  getProgramStudiProfesi,
-  getProgramStudiMagister,
-  getProgramStudiDoktor,
-  getSeleksiBebasTes,
+  getProgramStudiMagister,  
   getIntentResponses,
+  getLokasiKampus,
 
   // Initialization
   ensureInitialized,
