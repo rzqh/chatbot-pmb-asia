@@ -4,7 +4,7 @@ const { Suggestion } = require("dialogflow-fulfillment"); // Import Suggestion
 async function welcomeIntent(agent) {
   try {
     const response =
-      "Asista disini! 👋";
+      "Asista siap menjawab pertanyaan seputar PMB! 👋";
 
     agent.add(response);
 
