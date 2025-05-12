@@ -1,86 +1,62 @@
 const {
-    saveChatToDatabase,
-    getUserName,
-    getBiayaPendaftaran,
-  } = require("../services/database");
-  const { Payload } = require("dialogflow-fulfillment");
-  
-  async function biayaPendaftaranIntent(agent) {
-    const sessionId = agent.session;
-    const query = agent.query || "";
-    const intentName = "biaya_pendaftaran";
-  
-    let greeting = "";
-    let biayaPendaftaran = []; // Initialize 
-  
-    try {
-      const userName = await getUserName(sessionId);
-      console.log("✅ Nama pengguna yang diambil:", userName); // Debugging log untuk userName
+  saveChatToDatabase,
+  getUserName,
+  getBiayaPendaftaran,
+} = require("../services/database");
+const { Payload } = require("dialogflow-fulfillment");
 
-      greeting =
-        userName && userName !== "Sahabat Asista"
-          ? `Bapak/Ibu, berikut biaya pendaftaran yang tersedia di Institut Asia:`
-          : "Berikut biaya pendaftaran yang tersedia di Institut Asia:";
+async function biayaPendaftaranIntent(agent) {
+  const sessionId = agent.session;
+  const query = agent.query || "";
+  const intentName = "biaya_pendaftaran";
 
-      biayaPendaftaran = await getBiayaPendaftaran();
-      console.log("✅ Data biaya pendaftaran yang diambil:", biayaPendaftaran); // Debugging log untuk biayaPendaftaran
+  let greeting = "";
+  let biayaPendaftaran = [];
 
-      agent.add(greeting);
+  try {
+    const userName = await getUserName(sessionId);
+    greeting =
+      userName && userName !== "Sahabat Institut Asia"
+        ? `Bapak/Ibu/Saudara ${userName}, berikut biaya pendaftaran yang tersedia di Institut Asia:`
+        : "Berikut biaya pendaftaran yang tersedia di Institut Asia:";
 
-      if (biayaPendaftaran.length === 0) {
-        agent.add("Maaf, belum ada data biaya pendaftaran yang tersedia.");
-      } else {        
-        const richContent = biayaPendaftaran.map((item) => ({
-          type: "list",
-          title: item.title,
-          subtitle: item.subtitle,
-        }));
+    biayaPendaftaran = await getBiayaPendaftaran();
 
-        try {          
-          agent.add(
-            new Payload(
-              "DIALOGFLOW_MESSENGER",
-              {
-                richContent: [richContent],
-              },
-              { sendAsMessage: true, rawPayload: true }
-            )
-          );
-        } catch (payloadError) {
-          console.error("❌ Payload error:", payloadError);
-          agent.add("Maaf, terjadi kesalahan menampilkan data list.");
-        }
+    if (biayaPendaftaran.length === 0) {
+      agent.add("Maaf, belum ada data biaya pendaftaran yang tersedia.");
+    } else {
+      const richContent = biayaPendaftaran.map((item) => ({
+        type: "accordion", // Use accordion type
+        title: item.title,
+        subtitle: "Ketuk untuk menampilkan biaya pendaftaran", // Static subtitle for all items
+        text: [
+          `${item.periode_satu || "Data tidak tersedia"}`,
+          `${item.periode_dua || "Data tidak tersedia"}`,
+          `${item.periode_tiga || "Data tidak tersedia"}`,
+          `${item.periode_empat || "Data tidak tersedia"}`,
+        ], // Use specific period data for multi-line text
+      }));
 
-        // Fallback text response
-        const textResponse = biayaPendaftaran
-          .map((item, idx) => `${idx + 1}. ${item.title}: ${item.subtitle}`)
-          .join('\n');
-        agent.add(textResponse);
-      }
-
-      // Simpan chat ke database setelah semua respons dikirim
-      setTimeout(() => {
-        const allBiayaPendaftaran = biayaPendaftaran
-          .map((r, i) => `${i + 1}. ${r.title} - ${r.subtitle}`)
-          .join("\n");
-  
-        saveChatToDatabase(
-          sessionId,
-          query,
-          intentName,
-          `${greeting}\n${allBiayaPendaftaran}`,
-          "DIALOGFLOW_MESSENGER"
-        ).catch((err) => {
-          console.error("❗ Gagal simpan ke database, tapi UI sudah tampil:", err);
-        });
-      }, 100);
-      
-    } catch (error) {
-      console.error("🔥 Error terjadi di biayaPendaftaranIntent:", error);
       agent.add(
-        "Maaf, terjadi kesalahan saat menampilkan informasi. Silakan coba lagi."
+        new Payload(
+          "DIALOGFLOW_MESSENGER",
+          { richContent: [richContent] }, // Wrap in the required structure
+          { sendAsMessage: true, rawPayload: true }
+        )
       );
     }
+
+    await saveChatToDatabase(
+      sessionId,
+      query,
+      intentName,
+      greeting,
+      "DIALOGFLOW_MESSENGER"
+    );
+  } catch (error) {
+    console.error("🔥 Error terjadi di biayaPendaftaranIntent:", error);
+    agent.add("Maaf, terjadi kesalahan saat menampilkan informasi. Silakan coba lagi.");
   }
-  
-  module.exports = biayaPendaftaranIntent;
+}
+
+module.exports = biayaPendaftaranIntent;
