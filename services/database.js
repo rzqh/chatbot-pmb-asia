@@ -230,9 +230,21 @@ async function getJadwalPendaftaran() {
   }
 }
 
+async function getAlurPendaftaran() {
+  const client = await pool.connect();
+  try {
+    const res = await client.query(
+      'SELECT * FROM alur_pendaftaran WHERE active = true ORDER BY "order" ASC'
+    );
+    return res.rows;
+  } finally {
+    client.release();
+  }
+}
+
 async function getBiayaPendaftaran() {
   const result = await pool.query(
-    'SELECT title, subtitle FROM biaya_pendaftaran WHERE active = true ORDER BY "order"'
+    'SELECT title, periode_satu, periode_dua, periode_tiga, periode_empat FROM coba_biaya_pendaftaran WHERE active = true ORDER BY "order"'
   );
   return result.rows;
 }
@@ -269,6 +281,7 @@ module.exports = {
   getProgramStudiMagister,  
   getIntentResponses,
   getLokasiKampus,
+  getAlurPendaftaran,
 
   // Initialization
   ensureInitialized,
