@@ -1,5 +1,5 @@
 const { saveChatToDatabase } = require("../services/database");
-const { Suggestion } = require("dialogflow-fulfillment"); // Import Suggestion
+const { Suggestion, Payload } = require("dialogflow-fulfillment"); // Import Suggestion and Payload
 
 async function welcomeIntent(agent) {
   try {
@@ -7,6 +7,22 @@ async function welcomeIntent(agent) {
       "Asista siap menjawab pertanyaan seputar PMB! 👋";
 
     agent.add(response);
+
+    const richContent = [
+      {
+        type: "image",
+        rawUrl: "https://www.asia.ac.id/images/banner3.jpg",
+        accessibilityText: "Welcome Image",
+      },
+    ];
+
+    agent.add(
+      new Payload(
+        "DIALOGFLOW_MESSENGER",
+        { richContent: [richContent] },
+        { sendAsMessage: true, rawPayload: true }
+      )
+    );
 
     // Add suggestion chips for user interaction
     agent.add(new Suggestion("Ya, tentu!"));

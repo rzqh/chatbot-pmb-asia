@@ -1,3 +1,4 @@
+const { info } = require("actions-on-google/dist/common");
 const { pool, initializeDatabase } = require("../src/config/database");
 
 // Inisialisasi status database
@@ -26,6 +27,11 @@ const INTENT_DISPLAY_NAMES = {
   registrasi: "Cara Registrasi",
   faq: "Pertanyaan Umum",
   default: "Layanan Lainnya",
+  biaya_pendaftaran: "Biaya pendaftaran",
+  info_lokasi_kampus: "Lokasi Institut Asia",
+  info_program_studi_sarjana: "Program studi",
+  info_jadwal_pendaftaran: "Jadwal pendaftaran",
+  info_alur_pendaftaran: "Syarat dan alur pendaftaran",
 };
 
 // ✅ Fungsi untuk memastikan user sudah ada
@@ -158,14 +164,14 @@ async function getChatHistory(sessionId, limit = 5) {
 }
 
 // Fungsi ambil intent paling sering ditanya
-async function getMostAskedIntents(limit = 3) {
+async function getMostAskedIntents(limit = 5) {
   await ensureInitialized();
 
   try {
     const result = await pool.query(
       `SELECT intent, COUNT(*) as count
        FROM chats
-       WHERE intent NOT IN ('Default Welcome Intent', 'get_user_name')
+       WHERE intent NOT IN ('Default Welcome Intent', 'get_user_name', 'faq')
        GROUP BY intent
        ORDER BY count DESC
        LIMIT $1`,
@@ -230,6 +236,22 @@ async function getJadwalPendaftaran() {
   }
 }
 
+async function getUnitKegiatanMahasiswa() {
+  try {
+    const result = await pool.query(
+      `SELECT id, title, subtitle, "order", active
+       FROM unit_kegiatan_mahasiswa
+       WHERE active = true
+       ORDER BY "order" ASC`
+    );
+    return result.rows;
+  } catch (error) {
+    console.error("❌ Error getting Unit Kegiatan Mahasiswa:", error.message);
+    return [];
+  }
+}
+
+
 async function getAlurPendaftaran() {
   const client = await pool.connect();
   try {
@@ -244,7 +266,7 @@ async function getAlurPendaftaran() {
 
 async function getBiayaPendaftaran() {
   const result = await pool.query(
-    'SELECT title, periode_satu, periode_dua, periode_tiga, periode_empat FROM coba_biaya_pendaftaran WHERE active = true ORDER BY "order"'
+    'SELECT title, periode_satu, periode_dua, periode_tiga, periode_empat FROM biaya_pendaftaran WHERE active = true ORDER BY "order"'
   );
   return result.rows;
 }
@@ -265,6 +287,36 @@ async function getLokasiKampus() {
   return result.rows;
 }
 
+async function getFasilitas() {
+  const result = await pool.query(
+    `SELECT kategori, nama_fasilitas, deskripsi 
+     FROM fasilitas 
+     WHERE active = true 
+     ORDER BY kategori, nama_fasilitas`
+  );
+  return result.rows;
+}
+
+async function getBeasiswa() {
+  const result = await pool.query(
+    `SELECT title, subtitle 
+     FROM beasiswa 
+     WHERE active = true 
+     ORDER BY "order" ASC`
+  );
+  return result.rows;
+}
+
+async function getSyaratPendaftaran() {
+  const result = await pool.query(
+    `SELECT title 
+     FROM syarat_pendaftaran 
+     WHERE active = true 
+     ORDER BY "order" ASC`
+  );
+  return result.rows;
+}
+
 module.exports = {
   // User functions
   saveUserName,
@@ -282,7 +334,10 @@ module.exports = {
   getIntentResponses,
   getLokasiKampus,
   getAlurPendaftaran,
-
+  getFasilitas,
+  getBeasiswa,
+  getSyaratPendaftaran,
+  getUnitKegiatanMahasiswa,
   // Initialization
   ensureInitialized,
 };

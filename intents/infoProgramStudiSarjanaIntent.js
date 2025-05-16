@@ -1,37 +1,71 @@
 const { getProgramStudiSarjana, saveChatToDatabase } = require("../services/database");
+const { Payload } = require("dialogflow-fulfillment");
+const newlineToBr = require("newline-to-br");
 
 async function infoProgramStudiSarjanaIntent(agent) {
   try {
-    // Fetch program studi sarjana data from the database
+
+    agent.add("Berikut program studi yang tersedia di Institut Asia Malang");
+
     const programStudi = await getProgramStudiSarjana();
 
-    let response;
     if (programStudi.length === 0) {
-      response = "Maaf, saat ini tidak ada informasi program studi sarjana yang tersedia.";
-      agent.add(response);
+      agent.add("Maaf, saat ini tidak ada informasi program studi sarjana yang tersedia.");
     } else {
-      response = "Berikut adalah informasi program studi sarjana yang tersedia:\n";
-      programStudi.forEach((item, index) => {
-        response += `${index + 1}. Fakultas: ${item.fakultas}\n`;
-        response += `   Program Studi: ${item.program_studi}\n`;
-        if (item.program_studi_desc) {
-          response += `   Deskripsi: ${item.program_studi_desc}\n`;
-        }
-        if (item.akreditasi) {
-          response += `   Akreditasi: ${item.akreditasi}\n`;
-        }
-        response += "\n";
+      const richContent = programStudi.map((item) => {
+        let additionalText = "";
+
+        switch (item.program_studi) {
+          case "🧑‍💻 Teknik Informatika ":
+            additionalText = newlineToBr(
+              "\n\nTerdapat beberapa konsentrasi yaitu:\n- Multimedia & Game\n- Sistem Cerdas\n- Jaringan Komputer"
+            );
+            break;
+          case "🏦 Akuntansi":
+            additionalText = newlineToBr(
+              "\n\nTerdapat beberapa konsentrasi yaitu:\n- Akuntansi Manajemen\n- Akuntansi Keuangan\n- Akuntansi Keuangan Syari'ah"
+            );
+            break;
+          case "📊 Professional Business Management":
+            additionalText = newlineToBr(
+              "\n\nTerdapat beberapa konsentrasi yaitu:\n- Sumber Daya manusia\n- Pemasaran\n- International Business Management"
+            );
+            break;
+          case "🎨 Desain Komunikasi Visual":
+            additionalText = newlineToBr(
+              "\n\nTerdapat beberapa konsentrasi yaitu:\n- Branding\n- Ilustrasi\n- Media Rekam"
+            );
+            break;
+          default:
+            additionalText = "Informasi tambahan tidak tersedia.";
+        }        
+                        
+        return {
+          type: "accordion", // Use accordion type
+          title: `${item.program_studi}`,
+          subtitle: `Akreditasi: ${item.akreditasi}`, // Keep subtitle simple
+          text: [
+            `${item.program_studi_desc || "Deskripsi tidak tersedia"}`,
+            additionalText,
+          ].join("\n"), // Combine text into multi-line format
+        };
       });
-      agent.add(response);
+
+      agent.add(
+        new Payload(
+          "DIALOGFLOW_MESSENGER",
+          { richContent: [richContent] }, // Wrap in the required structure
+          { sendAsMessage: true, rawPayload: true }
+        )
+      );
     }
 
-    // Save the chat to the database
     await saveChatToDatabase(
       agent.session,
       agent.query,
       "info_program_studi_sarjana",
-      response, // Use the constructed response
-      agent.originalRequest.source || "unknown"
+      "Rich content sent",
+      "DIALOGFLOW_MESSENGER"
     );
   } catch (error) {
     console.error("Error in infoProgramStudiSarjanaIntent:", error);

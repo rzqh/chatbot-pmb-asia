@@ -1,31 +1,42 @@
 const { getLokasiKampus, saveChatToDatabase } = require("../services/database");
+const { Payload } = require("dialogflow-fulfillment");
 
 async function infoLokasiKampusIntent(agent) {
   try {
-    // Fetch lokasi kampus data from the database
-    const lokasiKampus = await getLokasiKampus();
+    const lokasiKampusData = await getLokasiKampus();
 
-    let response;
-    if (lokasiKampus.length === 0) {
-      response = "Maaf, saat ini tidak ada informasi lokasi kampus yang tersedia.";
-      agent.add(response);
+    if (!lokasiKampusData || lokasiKampusData.length === 0) {
+      agent.add("Maaf, saat ini tidak ada informasi lokasi kampus yang tersedia.");
     } else {
-      response = "Berikut adalah informasi lokasi kampus yang tersedia:\n\n";
-      lokasiKampus.forEach((item) => {
-        response += `${item.title}\n`;
-        response += `${item.subtitle}\n`;
-        response += `Peta Lokasi: ${item.link_maps}\n\n`;
-      });
-      agent.add(response);
+      agent.add("Berikut lokasi Institut Asia Malang. Ketuk pin dibawah untuk mengalihkan ke Google Maps 🗺️");
+
+      const locationContent = lokasiKampusData.map((item) => ({
+        type: "info",
+        title: item.title,
+        subtitle: item.subtitle,
+        image: {
+          src: {
+            rawUrl: "https://maps.google.com/mapfiles/ms/icons/red-dot.png"
+          },
+        },
+        actionLink: item.link_maps,
+      }));
+
+      agent.add(
+        new Payload(
+          "DIALOGFLOW_MESSENGER",
+          { richContent: [locationContent] },
+          { sendAsMessage: true, rawPayload: true }
+        )
+      );
     }
 
-    // Save the chat to the database
     await saveChatToDatabase(
       agent.session,
       agent.query,
       "info_lokasi_kampus",
-      response, // Use the constructed response
-      agent.originalRequest.source || "unknown"
+      "Rich content sent",
+      "DIALOGFLOW_MESSENGER"
     );
   } catch (error) {
     console.error("Error in infoLokasiKampusIntent:", error);
