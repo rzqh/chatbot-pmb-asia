@@ -5,6 +5,11 @@ async function infoBeasiswaIntent(agent) {
   try {
     const beasiswa = await getBeasiswa();
 
+    const imageContent= {
+      type: "image",
+      rawUrl: "https://www.asia.ac.id/images/banner4.jpg",
+      accessibilityText: "Beasiswa Asia Malang"
+    }
     if (beasiswa.length === 0) {
       agent.add("Maaf, saat ini tidak ada informasi beasiswa yang tersedia.");
     } else {
@@ -19,7 +24,7 @@ async function infoBeasiswaIntent(agent) {
       agent.add(
         new Payload(
           "DIALOGFLOW_MESSENGER",
-          { richContent: [richContent] },
+          { richContent: [[imageContent], richContent] },
           { sendAsMessage: true, rawPayload: true }
         )
       );
