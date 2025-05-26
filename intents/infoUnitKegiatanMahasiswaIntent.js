@@ -1,6 +1,12 @@
 const { getUnitKegiatanMahasiswa, saveChatToDatabase } = require("../services/database");
 const { Payload } = require("dialogflow-fulfillment");
 
+// Fungsi nl2br untuk mengubah newline menjadi <br>
+function nl2br(str) {
+  if (typeof str !== "string") return str;
+  return str.replace(/\n/g, "<br>");
+}
+
 async function infoUnitKegiatanMahasiswaIntent(agent) {
   try {
     const ukmData = await getUnitKegiatanMahasiswa();
@@ -25,9 +31,11 @@ async function infoUnitKegiatanMahasiswaIntent(agent) {
     // Buat rich content untuk setiap kategori
     const richContent = Object.entries(groupedUkm).map(([kategori, items]) => ({
       type: "accordion",
-      title: `Kategori: ${kategori}`,
-      subtitle: `${items.length} UKM`,
-      text: items.map(item => `- ${item.title}: ${item.subtitle || "Tidak ada deskripsi"}`).join('\n'),
+      title: kategori,
+      subtitle: `${items.length} Organisasi Mahasiswa`,
+      text: nl2br(
+        items.map(item => `- ${item.title}: ${item.subtitle || "Tidak ada deskripsi"}`).join('\n')
+      ),
     }));
 
     // Kirim rich content ke pengguna
