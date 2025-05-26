@@ -10,6 +10,7 @@ const infoFasilitasIntent = require("./infoFasilitasIntent");
 const infoBeasiswaIntent = require("./infoBeasiswaIntent");
 const infoSyaratPendaftaranIntent = require("./infoSyaratPendaftaranIntent");
 const infoUnitKegiatanMahasiswaIntent = require("./infoUnitKegiatanMahasiswaIntent");
+const whyChooseAsiaIntent = require("./whyChooseAsiaIntent");
 
 const intentMap = new Map();
 intentMap.set("welcome_pmb", welcomeIntent);
@@ -24,6 +25,7 @@ intentMap.set("fasilitas_asia", infoFasilitasIntent); // Changed from "info_fasi
 intentMap.set("beasiswa", infoBeasiswaIntent); // Changed from "info_beasiswa" to match Dialogflow intent name
 intentMap.set("syarat_pendaftaran", infoSyaratPendaftaranIntent);
 intentMap.set("ukm", infoUnitKegiatanMahasiswaIntent);
+intentMap.set("why_choose_asia", whyChooseAsiaIntent); // Changed from "info_why_choose_asia" to "why_choose_asia"
 
 module.exports = intentMap;
 
