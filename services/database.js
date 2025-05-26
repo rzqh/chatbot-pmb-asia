@@ -239,10 +239,10 @@ async function getJadwalPendaftaran() {
 async function getUnitKegiatanMahasiswa() {
   try {
     const result = await pool.query(
-      `SELECT id, title, subtitle, "order", active
+      `SELECT id, kategori, title, subtitle, "order", active
        FROM unit_kegiatan_mahasiswa
        WHERE active = true
-       ORDER BY "order" ASC`
+       ORDER BY kategori ASC`
     );
     return result.rows;
   } catch (error) {
