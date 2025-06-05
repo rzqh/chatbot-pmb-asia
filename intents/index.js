@@ -11,6 +11,7 @@ const infoBeasiswaIntent = require("./infoBeasiswaIntent");
 const infoSyaratPendaftaranIntent = require("./infoSyaratPendaftaranIntent");
 const infoUnitKegiatanMahasiswaIntent = require("./infoUnitKegiatanMahasiswaIntent");
 const whyChooseAsiaIntent = require("./whyChooseAsiaIntent");
+const fallbackIntent = require("./fallbackIntent"); // Tambahkan import fallbackIntent
 
 const intentMap = new Map();
 intentMap.set("welcome_pmb", welcomeIntent);
@@ -26,6 +27,7 @@ intentMap.set("beasiswa", infoBeasiswaIntent); // Changed from "info_beasiswa" t
 intentMap.set("syarat_pendaftaran", infoSyaratPendaftaranIntent);
 intentMap.set("ukm", infoUnitKegiatanMahasiswaIntent);
 intentMap.set("why_choose_asia", whyChooseAsiaIntent); // Changed from "info_why_choose_asia" to "why_choose_asia"
+intentMap.set("Default Fallback Intent", fallbackIntent); // Daftarkan fallback intent
 
 module.exports = intentMap;
 
