@@ -9,7 +9,7 @@ async function whyChooseAsiaIntent(agent) {
       [
         {
           type: "image",
-          rawUrl: "https://www.asia.ac.id/images/banner5.jpg",
+          rawUrl: "https://rzqhhh.sirv.com/Images/pmb-asia/banner5.jpg",
           accessibilityText: "Institut Asia Malang"
         }
       ],

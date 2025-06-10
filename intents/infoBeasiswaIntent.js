@@ -7,7 +7,7 @@ async function infoBeasiswaIntent(agent) {
 
     const imageContent= {
       type: "image",
-      rawUrl: "https://www.asia.ac.id/images/banner4.jpg",
+      rawUrl: "https://rzqhhh.sirv.com/Images/pmb-asia/banner4.jpg",
       accessibilityText: "Beasiswa Asia Malang"
     }
     if (beasiswa.length === 0) {
