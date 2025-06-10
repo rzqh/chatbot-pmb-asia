@@ -11,7 +11,7 @@ async function welcomeIntent(agent) {
     const richContent = [
       {
         type: "image",
-        rawUrl: "https://www.asia.ac.id/images/banner3.jpg",
+        rawUrl: "https://rzqhhh.sirv.com/Images/pmb-asia/banner3.jpg",
         accessibilityText: "Welcome Image",
       },
     ];

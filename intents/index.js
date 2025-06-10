@@ -21,13 +21,13 @@ intentMap.set("program_studi", infoProgramStudiSarjanaIntent);
 intentMap.set("lokasi_kampus", infoLokasiKampusIntent);
 intentMap.set("alur_pendaftaran", infoAlurPendaftaranIntent);
 intentMap.set("faq", faqIntent);
-intentMap.set("trigger_intent", triggerIntentHandler); // Tambahkan handler untuk event trigger_intent
-intentMap.set("fasilitas_asia", infoFasilitasIntent); // Changed from "info_fasilitas" to "fasilitas_asia"
-intentMap.set("beasiswa", infoBeasiswaIntent); // Changed from "info_beasiswa" to match Dialogflow intent name
+intentMap.set("trigger_intent", triggerIntentHandler);
+intentMap.set("fasilitas_asia", infoFasilitasIntent); 
+intentMap.set("beasiswa", infoBeasiswaIntent); 
 intentMap.set("syarat_pendaftaran", infoSyaratPendaftaranIntent);
 intentMap.set("ukm", infoUnitKegiatanMahasiswaIntent);
-intentMap.set("why_choose_asia", whyChooseAsiaIntent); // Changed from "info_why_choose_asia" to "why_choose_asia"
-intentMap.set("Default Fallback Intent", fallbackIntent); // Daftarkan fallback intent
+intentMap.set("why_choose_asia", whyChooseAsiaIntent);
+intentMap.set("Default Fallback Intent", fallbackIntent); 
 
 module.exports = intentMap;
 
