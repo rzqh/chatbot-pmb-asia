@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"No test specified\""
   },
   "keywords": [],
   "author": "",
@@ -17,7 +17,8 @@
     "fs": "^0.0.1-security",
     "google-maps-icons": "^0.0.4",
     "newline-to-br": "^1.0.0",
-    "pg": "^8.15.6"
+    "pg": "^8.15.6",
+    "uuid": "^11.1.0"
   },
   "repository": {
     "type": "git",
