@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "chatbot-backend": "node index.js",
     "test": "echo \"No test specified\""
   },
   "keywords": [],

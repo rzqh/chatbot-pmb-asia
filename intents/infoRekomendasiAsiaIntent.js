@@ -1,7 +1,7 @@
 const { saveChatToDatabase } = require("../services/database");
 const { Payload } = require("dialogflow-fulfillment");
 
-async function whyChooseAsiaIntent(agent) {
+async function infoRekomendasiAsiaIntent(agent) {
   try {
     agent.add("Kenapa memilih Institut Asia Malang? Berikut beberapa alasannya:");
 
@@ -53,14 +53,14 @@ async function whyChooseAsiaIntent(agent) {
     await saveChatToDatabase(
       agent.session,
       agent.query,
-      "why_choose_asia",
+      "rekomendasi_asia",
       "Alasan memilih Institut Asia Malang ditampilkan",
       "DIALOGFLOW_MESSENGER"
     );
   } catch (error) {
-    console.error("Error in whyChooseAsiaIntent:", error);
+    console.error("Error in infoRekomendasiAsiaIntent:", error);
     agent.add("Maaf, terjadi kesalahan saat memuat informasi. Silakan coba lagi.");
   }
 }
 
-module.exports = whyChooseAsiaIntent;
+module.exports = infoRekomendasiAsiaIntent;
