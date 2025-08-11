@@ -4,14 +4,14 @@ const biayaPendaftaranIntent = require("./infoBiayaPendaftaranIntent");
 const infoProgramStudiSarjanaIntent = require("./infoProgramStudiSarjanaIntent.js");
 const infoLokasiKampusIntent = require("./infoLokasiKampusIntent");
 const infoAlurPendaftaranIntent = require("./infoAlurPendaftaranIntent");
-const faqIntent = require("./faqIntent"); // Import the FAQ intent
+const faqIntent = require("./faqIntent");
 const triggerIntentHandler = require("./triggerIntentHandler");
 const infoFasilitasIntent = require("./infoFasilitasIntent");
 const infoBeasiswaIntent = require("./infoBeasiswaIntent");
 const infoSyaratPendaftaranIntent = require("./infoSyaratPendaftaranIntent");
 const infoUnitKegiatanMahasiswaIntent = require("./infoUnitKegiatanMahasiswaIntent");
 const infoRekomendasiAsiaIntent = require("./infoRekomendasiAsiaIntent");
-const fallbackIntent = require("./fallbackIntent"); // Tambahkan import fallbackIntent
+const fallbackIntent = require("./fallbackIntent"); 
 
 const intentMap = new Map();
 intentMap.set("welcome_pmb", welcomeIntent);
